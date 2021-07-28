@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: 'CreditData'
+  title: '123'
   version: '1.0'
 servers:
   - url: 'http://localhost:3000'
@@ -26,4 +26,23 @@ components:
         dateCredit:
           type: string
           format: date
+    OutInformationAboutCredit:
+      title: OutInformationAboutCredit
+      type: object
+      properties:
+        datePayment:
+          type: string
+          format: date
+        monthlyPayment:
+          type: number
+          format: double
+        repaymentAmount:
+          type: number
+          format: double
+        percent:
+          type: number
+          format: double
+        sumCredit:
+          type: number
+          format: double
   securitySchemes: {}
