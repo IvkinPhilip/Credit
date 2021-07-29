@@ -1,5 +1,6 @@
 package ru.fivkin;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.fivkin.credit.dto.CreditInformation;
 import ru.fivkin.credit.dto.OutInformationAboutCredit;
 
@@ -7,14 +8,19 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class Calculation {
 
+    private Calculation(){
+
+    }
+
     public static boolean checkDoubleZero(Double checkData) {
-        return checkData <= 0;
+        return checkData > 0;
     }
 
     public static boolean checkIntZero(Integer checkData) {
-        return checkData <= 0;
+        return checkData > 0;
     }
 
     public static int checkBigDecimalZero(BigDecimal checkData) {
@@ -25,12 +31,12 @@ public class Calculation {
     public static List<OutInformationAboutCredit> getAnnuityCalculation(CreditInformation creditInformation) {
         List<OutInformationAboutCredit> listCalculation = new ArrayList<>();
         try {
-            if (checkBigDecimalZero(creditInformation.getSumCredit()) > 0 && !checkDoubleZero(creditInformation.getInterestRate()) && !checkIntZero(creditInformation.getLoanPeriod())) {
+            if (checkBigDecimalZero(creditInformation.getSumCredit()) > 0 && checkDoubleZero(creditInformation.getInterestRate()) && checkIntZero(creditInformation.getLoanPeriod())) {
 
                 for (int i = 0; i < creditInformation.getLoanPeriod(); i++) {
                     OutInformationAboutCredit outInformationAboutCredit = new OutInformationAboutCredit();
                     double monthlyRate = creditInformation.getInterestRate() / (12 * 100);
-                    outInformationAboutCredit.setMonthlyPayment(creditInformation.getSumCredit().toBigInteger().doubleValue() * (monthlyRate + ((monthlyRate) / (Math.pow(1 + monthlyRate, 12 - i) - 1))));
+                    outInformationAboutCredit.setMonthlyPayment(creditInformation.getSumCredit().toBigInteger().doubleValue() * (monthlyRate + ((monthlyRate) / (Math.pow(1 + monthlyRate, 12.0 - i) - 1))));
                     outInformationAboutCredit.setPercent(creditInformation.getSumCredit().toBigInteger().doubleValue() * monthlyRate);
                     outInformationAboutCredit.setRepaymentAmount(outInformationAboutCredit.getMonthlyPayment() - outInformationAboutCredit.getPercent());
 
@@ -46,11 +52,8 @@ public class Calculation {
 
             }
             return listCalculation;
-        } catch (NullPointerException e) {
-            System.err.println("Exception NullPointer");
-            return listCalculation;
-        } catch (ArithmeticException e) {
-            System.err.println("Exception ArithmeticException");
+        } catch (NullPointerException | ArithmeticException e) {
+            log.error(e.getMessage(), e);
             return listCalculation;
         }
     }
@@ -60,7 +63,7 @@ public class Calculation {
 
 
         try {
-            if (checkBigDecimalZero(creditInformation.getSumCredit()) > 0 && !checkDoubleZero(creditInformation.getInterestRate()) && !checkIntZero(creditInformation.getLoanPeriod())) {
+            if (checkBigDecimalZero(creditInformation.getSumCredit()) > 0 && checkDoubleZero(creditInformation.getInterestRate()) && checkIntZero(creditInformation.getLoanPeriod())) {
 
                 double repayment = creditInformation.getSumCredit().toBigInteger().doubleValue() / creditInformation.getLoanPeriod();
                 for (int i = 0; i < creditInformation.getLoanPeriod(); i++) {
@@ -83,11 +86,8 @@ public class Calculation {
             }
 
             return listCalculation;
-        } catch (NullPointerException e) {
-            System.err.println("Exception NullPointer");
-            return listCalculation;
-        } catch (ArithmeticException e) {
-            System.err.println("Exception ArithmeticException");
+        } catch (NullPointerException | ArithmeticException e) {
+            log.error(e.getMessage(), e);
             return listCalculation;
         }
     }
