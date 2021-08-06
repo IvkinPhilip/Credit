@@ -34,14 +34,10 @@ components:
           format: date
         monthlyPayment:
           type: number
-          format: double
         repaymentAmount:
           type: number
-          format: double
         percent:
           type: number
-          format: double
         sumCredit:
           type: number
-          format: double
   securitySchemes: {}
